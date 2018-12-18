@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+**/.vs
+/lib/Assembly-*.dll
+/lib/0Harmony.dll
+/lib/UnityEngine*.dll
+Source/**/obj
+Source/**/bin
+*.user
