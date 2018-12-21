@@ -22,5 +22,5 @@ deploy:
   overwrite: true
   body: "$RELEASE_BODY"
   on:
-    branch: ci
+    branch: master
     tags: true
