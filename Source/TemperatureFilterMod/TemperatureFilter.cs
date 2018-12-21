@@ -57,11 +57,11 @@ namespace TemperatureFilterMod
             }
         }
 
-        public float CurrentValue => Conduit.GetFlowManager(this.portInfo.conduitType).GetContents(inputCell).temperature;
+        public float CurrentValue { get { return Conduit.GetFlowManager(this.portInfo.conduitType).GetContents(inputCell).temperature; } }
 
-        public float RangeMin => rangeMin;
+        public float RangeMin { get { return rangeMin; } }
 
-        public float RangeMax => rangeMax;
+        public float RangeMax { get { return rangeMax; } }
 
         public LocString Title
         {
