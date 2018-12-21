@@ -1,4 +1,4 @@
-# Oxigen Not Include MODs
+# Oxygen Not Included Mods
 <p align="center">
 <img src="https://img.shields.io/travis/Blindfold-Games/ONI-Blind-MODS/master.svg?logo=travis" />
 <img src="https://img.shields.io/badge/ONI_version-Q1--299745-brightgreen.svg" />
