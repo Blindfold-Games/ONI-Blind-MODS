@@ -1,6 +1,7 @@
 # Oxygen Not Included Mods
 <p align="center">
 <img src="https://img.shields.io/travis/Blindfold-Games/ONI-Blind-MODS/master.svg?logo=travis" />
+ <a class="badge-align" href="https://www.codacy.com/app/Blindfold/ONI-Blind-MODS?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Blindfold-Games/ONI-Blind-MODS&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/6ddaa8afeb9a47c181d00a9284451917"/></a>
 <img src="https://img.shields.io/badge/ONI_version-Q1--300556-brightgreen.svg" />
 <img src="https://img.shields.io/github/issues/Blindfold-Games/ONI-Blind-MODS/mod-request.svg?label=mod%20requests" />
 <img src="https://img.shields.io/github/issues/Blindfold-Games/ONI-Blind-MODS/bug.svg" />
