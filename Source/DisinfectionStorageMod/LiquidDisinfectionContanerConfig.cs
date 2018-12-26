@@ -12,7 +12,7 @@ namespace DisinfectionStorageMod
 
         public override BuildingDef CreateBuildingDef()
         {
-            BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(ID, 2, 3, "liquidreservoir_kanim", 100, 120f, BUILDINGS.CONSTRUCTION_MASS_KG.TIER4, MATERIALS.ALL_METALS, 800f, BuildLocationRule.OnFloor, BUILDINGS.DECOR.PENALTY.TIER1, NOISE_POLLUTION.NOISY.TIER0, 0.2f);
+            BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(ID, WIDTH, HEIGHT, "liquidreservoir_kanim", 100, 120f, BUILDINGS.CONSTRUCTION_MASS_KG.TIER4, MATERIALS.ALL_METALS, 800f, BuildLocationRule.OnFloor, BUILDINGS.DECOR.PENALTY.TIER1, NOISE_POLLUTION.NOISY.TIER0, 0.2f);
             buildingDef.InputConduitType = ConduitType.Liquid;
             buildingDef.OutputConduitType = ConduitType.Liquid;
             buildingDef.Floodable = false;
@@ -33,15 +33,15 @@ namespace DisinfectionStorageMod
             defaultStorage.capacityKg = 5000f;
             defaultStorage.SetDefaultStoredItemModifiers(GasReservoirConfig.ReservoirStoredItemModifiers);
             ConduitConsumer conduitConsumer = go.AddOrGet<ConduitConsumer>();
-            conduitConsumer.conduitType = ConduitType.Liquid;
+            conduitConsumer.conduitType = CONDUIT_TYPE;
             conduitConsumer.ignoreMinMassCheck = true;
             conduitConsumer.forceAlwaysSatisfied = true;
             conduitConsumer.alwaysConsume = true;
             conduitConsumer.capacityKG = defaultStorage.capacityKg;
             DisinfectionConduitDispenser conduitDispenser = go.AddOrGet<DisinfectionConduitDispenser>();
-            conduitDispenser.conduitType = ConduitType.Liquid;
-            conduitDispenser.elementFilter = (SimHashes[])null;
-            conduitDispenser.germsDensityThreshold = 100.0d; // germs per kg of liquid
+            conduitDispenser.TypeOfConduit = ConduitType.Liquid;
+            conduitDispenser.ElementFilter = (SimHashes[])null;
+            conduitDispenser.GermsDensityThreshold = 100.0d; // germs per kg of liquid
         }
 
         public override void DoPostConfigureComplete(GameObject go)

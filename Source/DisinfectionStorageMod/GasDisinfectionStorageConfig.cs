@@ -6,14 +6,20 @@ namespace DisinfectionStorageMod
 {
     class GasDisinfectionStorageConfig : IBuildingConfig
     {
-        public const string ID = "GasDisinfectionReservoir";
+        public static string ID
+        {
+            get
+            {
+                return "GasDisinfectionReservoir";
+            }
+        }
         private const ConduitType CONDUIT_TYPE = ConduitType.Gas;
         private const int WIDTH = 5;
         private const int HEIGHT = 3;
 
         public override BuildingDef CreateBuildingDef()
         {
-            BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(ID, 5, 3, "gasstorage_kanim", 100, 120f, BUILDINGS.CONSTRUCTION_MASS_KG.TIER4, MATERIALS.ALL_METALS, 800f, BuildLocationRule.OnFloor, BUILDINGS.DECOR.PENALTY.TIER1, NOISE_POLLUTION.NOISY.TIER0, 0.2f);
+            BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(ID, WIDTH, HEIGHT, "gasstorage_kanim", 100, 120f, BUILDINGS.CONSTRUCTION_MASS_KG.TIER4, MATERIALS.ALL_METALS, 800f, BuildLocationRule.OnFloor, BUILDINGS.DECOR.PENALTY.TIER1, NOISE_POLLUTION.NOISY.TIER0, 0.2f);
             buildingDef.InputConduitType = ConduitType.Gas;
             buildingDef.OutputConduitType = ConduitType.Gas;
             buildingDef.Floodable = false;
@@ -33,15 +39,15 @@ namespace DisinfectionStorageMod
             defaultStorage.capacityKg = 150f;
             defaultStorage.SetDefaultStoredItemModifiers(GasReservoirConfig.ReservoirStoredItemModifiers);
             ConduitConsumer conduitConsumer = go.AddOrGet<ConduitConsumer>();
-            conduitConsumer.conduitType = ConduitType.Gas;
+            conduitConsumer.conduitType = CONDUIT_TYPE;
             conduitConsumer.ignoreMinMassCheck = true;
             conduitConsumer.forceAlwaysSatisfied = true;
             conduitConsumer.alwaysConsume = true;
             conduitConsumer.capacityKG = defaultStorage.capacityKg;
             DisinfectionConduitDispenser conduitDispenser = go.AddOrGet<DisinfectionConduitDispenser>();
-            conduitDispenser.conduitType = ConduitType.Gas;
-            conduitDispenser.elementFilter = (SimHashes[])null;
-            conduitDispenser.germsDensityThreshold = 10.0; //germs per kg of gas
+            conduitDispenser.TypeOfConduit = CONDUIT_TYPE;
+            conduitDispenser.ElementFilter = (SimHashes[])null;
+            conduitDispenser.GermsDensityThreshold = 10.0; //germs per kg of gas
         }
 
         public override void DoPostConfigureComplete(GameObject go)

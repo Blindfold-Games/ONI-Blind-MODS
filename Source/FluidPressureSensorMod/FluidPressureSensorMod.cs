@@ -10,6 +10,7 @@ namespace FluidPressureSensor
 
         public static void Log(string message)
         {
+            // Logs messages only in debug builds
 #if DEBUG
             Debug.Log(message);
 #endif
@@ -17,6 +18,7 @@ namespace FluidPressureSensor
 
         public static void LogFormat(string template, params object[] args)
         {
+            // Logs messages only in debug builds
 #if DEBUG
             Debug.LogFormat(template, args);
 #endif
@@ -25,8 +27,9 @@ namespace FluidPressureSensor
     }
 
     [HarmonyPatch(typeof(GeneratedBuildings), "LoadGeneratedBuildings")]
-    internal class AdvFluidDistrMod_GeneratedBuildings_LoadGeneratedBuildings
+    internal static class AdvFluidDistrMod_GeneratedBuildings_LoadGeneratedBuildings
     {
+        [HarmonyPrefix]
         private static void Prefix()
         {
             Strings.Add("STRINGS.BUILDINGS.CONDUITPRESSURESENSOR.MASS", "Mass");
@@ -47,9 +50,10 @@ namespace FluidPressureSensor
     }
 
     [HarmonyPatch(typeof(Db), "Initialize")]
-    internal class AdvFluidDistrMod_Db_Initialize
+    internal static class AdvFluidDistrMod_Db_Initialize
     {
-        private static void Prefix(Db __instance)
+        [HarmonyPrefix]
+        private static void Prefix()
         {
             Logger.Log("Entry AdvFluidDistrMod_Db_Initialize.Prefix");
             List<string> ls = new List<string>(Database.Techs.TECH_GROUPING["HVAC"]);

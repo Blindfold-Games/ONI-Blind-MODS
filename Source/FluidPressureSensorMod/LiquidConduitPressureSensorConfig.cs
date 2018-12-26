@@ -6,7 +6,7 @@ namespace FluidPressureSensor
 {
     public class LiquidConduitPressureConfig : ConduitSensorConfig
     {
-        public static string ID = "LiquidConduitPressureSensor";
+        public static readonly string ID = "LiquidConduitPressureSensor";
 
         protected override ConduitType ConduitType
         {

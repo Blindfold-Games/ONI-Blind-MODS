@@ -11,18 +11,18 @@ namespace TemperatureFilterMod
     {
         [SerializeField]
         [Serialize]
-        protected float threshold = 0.0f;
+        protected float threshold;
         [SerializeField]
         [Serialize]
         protected bool activateAboveThreshold = true;
-        public float rangeMin = 0.0f;
-        public float rangeMax = 373.15f;
+        protected float rangeMin;
+        protected float rangeMax = 373.15f;
 
         private int inputCell = -1;
         private int outputCell = -1;
         private int filteredCell = -1;
         [SerializeField]
-        public ConduitPortInfo portInfo;
+        private ConduitPortInfo portInfo;
         [MyCmpReq]
         private Operational operational;
         [MyCmpReq]
@@ -59,9 +59,39 @@ namespace TemperatureFilterMod
 
         public float CurrentValue { get { return Conduit.GetFlowManager(this.portInfo.conduitType).GetContents(inputCell).temperature; } }
 
-        public float RangeMin { get { return rangeMin; } }
+        public float RangeMin {
+            get
+            {
+                return this.rangeMin;
+            }
+            set
+            {
+                this.rangeMin = value;
+            }
+        }
 
-        public float RangeMax { get { return rangeMax; } }
+        public float RangeMax {
+            get
+            {
+                return this.rangeMax;
+            }
+            set
+            {
+                this.rangeMax = value;
+            }
+        }
+
+        public ConduitPortInfo PortInfo
+        {
+            get
+            {
+                return this.portInfo;
+            }
+            set
+            {
+                this.portInfo = value;
+            }
+        }
 
         public LocString Title
         {
@@ -155,9 +185,14 @@ namespace TemperatureFilterMod
                 case ConduitType.Solid:
                     layer = GameScenePartitioner.Instance.solidConduitsLayer;
                     break;
+                default:
+                    layer = null;
+                    break;
             }
             if (layer == null)
+            {
                 return;
+            }
         }
 
         protected override void OnCleanUp()
@@ -185,14 +220,16 @@ namespace TemperatureFilterMod
                     num = contents1.temperature > this.threshold ? this.outputCell : this.filteredCell;
                 }
                 ConduitFlow.ConduitContents contents2 = flowManager.GetContents(num);
-                if ((double)contents1.mass > 0.0 && 
-                    ((double)contents2.mass <= 0.0 || contents2.element.Equals(contents1.element) )
-                   ) 
+                if ((double)contents1.mass > 0.0 &&
+                    ((double)contents2.mass <= 0.0 || contents2.element.Equals(contents1.element))
+                   )
                 {
                     flag = true;
                     float delta = flowManager.AddElement(num, contents1.element, contents1.mass, contents1.temperature, contents1.diseaseIdx, contents1.diseaseCount);
                     if ((double)delta > 0.0)
+                    {
                         flowManager.RemoveElement(this.inputCell, delta);
+                    }
                 }
             }
             this.operational.SetActive(flag, false);
@@ -218,7 +255,9 @@ namespace TemperatureFilterMod
             }
             bool flag2 = this.needsConduitStatusItemGuid != Guid.Empty;
             if (flag1 != flag2)
+            {
                 return;
+            }
             this.needsConduitStatusItemGuid = this.selectable.ToggleStatusItem(status_item, this.needsConduitStatusItemGuid, !flag1, (object)null);
         }
 
@@ -228,23 +267,10 @@ namespace TemperatureFilterMod
             StatusItem blockedMultiples = Db.Get().BuildingStatusItems.ConduitBlockedMultiples;
             bool flag2 = this.conduitBlockedStatusItemGuid != Guid.Empty;
             if (flag1 != flag2)
-                return;
-            this.conduitBlockedStatusItemGuid = this.selectable.ToggleStatusItem(blockedMultiples, this.conduitBlockedStatusItemGuid, !flag1, (object)null);
-        }
-
-        private bool ShowInUtilityOverlay(HashedString mode, object data)
-        {
-            bool flag = false;
-            switch (((TemperatureFilter)data).portInfo.conduitType)
             {
-                case ConduitType.Gas:
-                    flag = mode == OverlayModes.GasConduits.ID;
-                    break;
-                case ConduitType.Liquid:
-                    flag = mode == OverlayModes.LiquidConduits.ID;
-                    break;
+                return;
             }
-            return flag;
+            this.conduitBlockedStatusItemGuid = this.selectable.ToggleStatusItem(blockedMultiples, this.conduitBlockedStatusItemGuid, !flag1, (object)null);
         }
 
         public ConduitType GetSecondaryConduitType()
@@ -274,7 +300,7 @@ namespace TemperatureFilterMod
 
         public LocString ThresholdValueUnits()
         {
-            LocString locString = (LocString)null;
+            LocString locString;
             switch (GameUtil.temperatureUnit)
             {
                 case GameUtil.TemperatureUnit.Celsius:
@@ -285,6 +311,9 @@ namespace TemperatureFilterMod
                     break;
                 case GameUtil.TemperatureUnit.Kelvin:
                     locString = UI.UNITSUFFIXES.TEMPERATURE.KELVIN;
+                    break;
+                default:
+                    locString = (LocString)null;
                     break;
             }
             return locString;

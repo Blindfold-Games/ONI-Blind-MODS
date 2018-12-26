@@ -10,19 +10,19 @@ public class DisinfectionConduitDispenser : KMonoBehaviour, ISaveLoadable
     private static readonly Operational.Flag outputConduitFlag = new Operational.Flag("output_conduit", Operational.Flag.Type.Functional);
     private int utilityCell = -1;
     [SerializeField]
-    public ConduitType conduitType;
+    private ConduitType conduitType;
     [SerializeField]
-    public SimHashes[] elementFilter;
+    private SimHashes[] elementFilter;
     [SerializeField]
-    public bool invertElementFilter;
+    private bool invertElementFilter;
     [SerializeField]
-    public bool alwaysDispense;
+    private bool alwaysDispense;
     [MyCmpReq]
     private Operational operational;
     [MyCmpReq]
-    public Storage storage;
+    private Storage storage;
     [SerializeField]
-    public double germsDensityThreshold = 10.0;
+    private double germsDensityThreshold = 10.0;
     private HandleVector<int>.Handle partitionerEntry;
     private int elementOutputOffset;
 
@@ -31,6 +31,34 @@ public class DisinfectionConduitDispenser : KMonoBehaviour, ISaveLoadable
         get
         {
             return this.conduitType;
+        }
+        set
+        {
+            this.conduitType = value;
+        }
+    }
+
+    public SimHashes[] ElementFilter
+    {
+        get
+        {
+            return this.elementFilter;
+        }
+        set
+        {
+            this.elementFilter = value;
+        }
+    }
+
+    public bool InvertElementFilter
+    {
+        get
+        {
+            return this.invertElementFilter;
+        }
+        set
+        {
+            this.invertElementFilter = value;
         }
     }
 
@@ -41,6 +69,19 @@ public class DisinfectionConduitDispenser : KMonoBehaviour, ISaveLoadable
             return this.GetConduitManager().GetContents(this.utilityCell);
         }
     }
+
+    public double GermsDensityThreshold
+    {
+        get
+        {
+            return germsDensityThreshold;
+        }
+        set
+        {
+            germsDensityThreshold = value;
+        }
+    }
+
 
     public void SetConduitData(ConduitType type)
     {
@@ -85,16 +126,21 @@ public class DisinfectionConduitDispenser : KMonoBehaviour, ISaveLoadable
     {
         this.operational.SetFlag(DisinfectionConduitDispenser.outputConduitFlag, this.IsConnected);
         if (!this.operational.IsOperational && !this.alwaysDispense)
+        {
             return;
+        }
         PrimaryElement suitableElement = this.FindSuitableElement();
-        if (!((UnityEngine.Object)suitableElement != (UnityEngine.Object)null))
+        if ((UnityEngine.Object)suitableElement == (UnityEngine.Object)null)
+        {
             return;
+        }
         suitableElement.KeepZeroMassObject = true;
         float num1 = this.GetConduitManager().AddElement(this.utilityCell, suitableElement.ElementID, suitableElement.Mass, suitableElement.Temperature, byte.MaxValue, 0);
         if ((double)num1 <= 0.0)
+        {
             return;
+        }
         int num2 = (int)((double)(num1 / suitableElement.Mass) * (double)suitableElement.DiseaseCount);
-//        suitableElement.ModifyDiseaseCount(-num2, "ConduitDispenser.ConduitUpdate");
         suitableElement.Mass -= num1;
         this.Trigger(-1697596308, (object)suitableElement.gameObject);
     }
@@ -125,7 +171,9 @@ public class DisinfectionConduitDispenser : KMonoBehaviour, ISaveLoadable
         for (int index = 0; index != this.elementFilter.Length; ++index)
         {
             if (this.elementFilter[index] == element)
+            {
                 return true;
+            }
         }
         return false;
     }
@@ -136,7 +184,9 @@ public class DisinfectionConduitDispenser : KMonoBehaviour, ISaveLoadable
         {
             GameObject gameObject = Grid.Objects[this.utilityCell, this.conduitType != ConduitType.Gas ? 16 : 12];
             if ((UnityEngine.Object)gameObject != (UnityEngine.Object)null)
+            {
                 return (UnityEngine.Object)gameObject.GetComponent<BuildingComplete>() != (UnityEngine.Object)null;
+            }
             return false;
         }
     }

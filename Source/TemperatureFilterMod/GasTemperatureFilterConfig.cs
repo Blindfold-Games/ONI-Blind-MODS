@@ -6,13 +6,18 @@ namespace TemperatureFilterMod
 {
     public class GasTemperatureFilterConfig : IBuildingConfig
     {
-        private ConduitPortInfo secondaryPort = new ConduitPortInfo(ConduitType.Gas, new CellOffset(0, 0));
-        public const string ID = "GasTemperatureFilter";
+        private readonly ConduitPortInfo secondaryPort = new ConduitPortInfo(ConduitType.Gas, new CellOffset(0, 0));
+        public static string ID
+        {
+            get
+            {
+                return "GasTemperatureFilter";
+            }
+        }
         private const ConduitType CONDUIT_TYPE = ConduitType.Gas;
 
         public override BuildingDef CreateBuildingDef()
         {
-            string id = ID;
             int width = 3;
             int height = 1;
             string anim = "filter_gas_kanim";
@@ -23,7 +28,7 @@ namespace TemperatureFilterMod
             float melting_point = 1600f;
             BuildLocationRule build_location_rule = BuildLocationRule.Anywhere;
             EffectorValues tieR1 = NOISE_POLLUTION.NOISY.TIER1;
-            BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(id, width, height, anim, hitpoints, construction_time, tieR3, rawMetals, melting_point, build_location_rule, BUILDINGS.DECOR.PENALTY.TIER0, tieR1, 0.2f);
+            BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(ID, width, height, anim, hitpoints, construction_time, tieR3, rawMetals, melting_point, build_location_rule, BUILDINGS.DECOR.PENALTY.TIER0, tieR1, 0.2f);
             buildingDef.RequiresPowerInput = true;
             buildingDef.EnergyConsumptionWhenActive = 120f;
             buildingDef.SelfHeatKilowattsWhenActive = 0.0f;
@@ -60,15 +65,15 @@ namespace TemperatureFilterMod
         {
             go.GetComponent<KPrefabID>().AddTag(RoomConstraints.ConstraintTags.IndustrialMachinery);
             go.AddOrGet<Structure>();
-            go.AddOrGet<TemperatureFilter>().portInfo = this.secondaryPort;
+            go.AddOrGet<TemperatureFilter>().PortInfo = this.secondaryPort;
         }
 
         public override void DoPostConfigureComplete(GameObject go)
         {
             go.AddOrGetDef<PoweredActiveController.Def>().showWorkingStatus = true;
             TemperatureFilter filter = go.AddOrGet<TemperatureFilter>();
-            filter.rangeMin = 0f;
-            filter.rangeMax = 9999f;
+            filter.RangeMin = 0f;
+            filter.RangeMax = 9999f;
         }
     }
 }

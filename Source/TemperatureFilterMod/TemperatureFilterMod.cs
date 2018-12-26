@@ -7,7 +7,7 @@ using Harmony;
 namespace TemperatureFilterMod
 {
     [HarmonyPatch(typeof(GeneratedBuildings), "LoadGeneratedBuildings")]
-    internal class TemperatureFilterMod_GeneratedBuildings_LoadGeneratedBuildings
+    internal static class TemperatureFilterMod_GeneratedBuildings_LoadGeneratedBuildings
     {
         private static LocString LIQUIDTEMPERATUREFILTER_NAME = new LocString("Liquid Temperature filter", "STRINGS.BUILDINGS.PREFABS." + LiquidTemperatureFilterConfig.ID.ToUpper() + ".NAME");
         private static LocString LIQUIDTEMPERATUREFILTER_DESC = new LocString("Liquid Temperature filters send liquid with specific temperature into a special pipe, expelling everything else through a second output.", "STRINGS.BUILDINGS.PREFABS." + LiquidTemperatureFilterConfig.ID.ToUpper() + ".DESC");
@@ -15,6 +15,8 @@ namespace TemperatureFilterMod
         private static LocString GASTEMPERATUREFILTER_NAME = new LocString("Gas Temperature filter", "STRINGS.BUILDINGS.PREFABS." + GasTemperatureFilterConfig.ID.ToUpper() + ".NAME");
         private static LocString GASTEMPERATUREFILTER_DESC = new LocString("Gas Temperature filters send gas with specific temperature into a special pipe, expelling everything else through a second output.", "STRINGS.BUILDINGS.PREFABS." + GasTemperatureFilterConfig.ID.ToUpper() + ".DESC");
         private static LocString GASTEMPERATUREFILTER_EFFECT = new LocString("Extracts gas with defined temperature out from a stream and put it into output pipe", "STRINGS.BUILDINGS.PREFABS." + GasTemperatureFilterConfig.ID.ToUpper() + ".EFFECT");
+
+        [HarmonyPrefix]
         private static void Prefix()
         {
             Debug.Log("Entry TemperatureFilterMod_GeneratedBuildings_LoadGeneratedBuildings.Prefix");      
@@ -33,9 +35,10 @@ namespace TemperatureFilterMod
     }
 
     [HarmonyPatch(typeof(Db), "Initialize")]
-    internal class TemperatureFilterMod_Db_Initialize
+    internal static class TemperatureFilterMod_Db_Initialize
     {
-        private static void Prefix(Db __instance)
+        [HarmonyPrefix]
+        private static void Prefix()
         {
             Debug.Log("Entry TemperatureFilterMod_Db_Initialize.Prefix");
             List<string> ls = new List<string>(Database.Techs.TECH_GROUPING["LiquidTemperature"]);
